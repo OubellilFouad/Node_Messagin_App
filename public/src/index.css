@@ -11,4 +11,32 @@
         max-height:100vh;
         overflow: hidden;
     }
+    @media screen and (min-width: 720px) and (max-width: 1080px) {
+        .container{
+            grid-template-columns: 35% 65%;
+        }
+    }
+    @media screen and (min-width: 720px) and (max-width: 1080px) {
+        .currentUser{
+            gap: 0.5rem;
+        }
+        .currentUser h2{
+            font-size: 1rem;
+        }
+        .currentUser img{
+            height: 3rem;
+        }
+    }
+    ::-webkit-scrollbar{
+        width: 0.2rem;
+    }
+    ::-webkit-scrollbar-thumb{
+        background-color: #ffffff39;
+        width: 0.1rem;
+        border-radius: 1rem;
+    }
+    .picker {
+        position: absolute !important;
+        top: -460px !important;
+    }
 }

@@ -20,7 +20,7 @@ function SetAvatar() {
         })
         if(data.isSet){
             user.isAvatarImageSet = true;
-            user.AvatarImage = data.image;
+            user.avatarImage = data.image;
             localStorage.setItem('chat_app_user',JSON.stringify(user));
             navigate('/')
         }else{

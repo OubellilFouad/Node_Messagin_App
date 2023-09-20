@@ -1,8 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const socket = require('socket.io');
 var bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
+const messagesRoutes = require('./routes/messagesRoutes');
 
 
 const app = express();
@@ -27,7 +29,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use("/api/auth",jsonParser,userRoutes)
+app.use("/api/auth",jsonParser,userRoutes);
+app.use("/api/messages",jsonParser,messagesRoutes);
 
 app.use(cors());
 app.use(express.json());
@@ -43,4 +46,25 @@ mongoose.connect(process.env.MONGOURL,{
 
 const server = app.listen(process.env.PORT,(req,res) => {
     console.log('Connected');
+})
+
+const io = socket(server, {
+    cors: {
+        origin: "http://localhost:5173",
+        credentials: true,
+    }
+})
+
+global.onlineUsers = new Map();
+io.on('connection', (socket) => {
+    global.chatSocket= socket;
+    socket.on('add-user',(userId) => {
+        onlineUsers.set(userId,socket.id);
+    });
+    socket.on('send-msg', (data) => {
+        const sendUserSocket = onlineUsers.get(data.to);
+        if(sendUserSocket){
+            socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+        }
+    });
 })
